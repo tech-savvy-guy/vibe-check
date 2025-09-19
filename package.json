@@ -1,0 +1,50 @@
+{
+  "name": "vibe-check",
+  "version": "0.0.0",
+  "description": "AI-powered codebase vulnerability scanner",
+  "main": "dist/cli.cjs",
+  "module": "dist/cli.mjs",
+  "types": "dist/cli.d.ts",
+  "bin": {
+    "vibe-check": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/cli.ts --format cjs,esm --dts",
+    "prepare": "pnpm build",
+    "start": "tsx src/cli.ts",
+    "dev": "tsup src/cli.ts --format cjs,esm --dts --watch"
+  },
+  "keywords": [
+    "pnpm",
+    "typescript",
+    "library",
+    "security",
+    "vulnerability-scanner",
+    "ai"
+  ],
+  "author": "Soham Datta",
+  "license": "MIT",
+  "dependencies": {
+    "@codebolt/codeboltjs": "^1.0.0",
+    "@inquirer/prompts": "^7.8.6",
+    "@openrouter/ai-sdk-provider": "^1.2.0",
+    "@types/cli-progress": "^3.11.6",
+    "ai": "^5.0.47",
+    "chalk": "^5.6.2",
+    "cli-progress": "^3.12.0",
+    "commander": "^11.0.0",
+    "ora": "^7.0.1",
+    "zod": "^4.1.9"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.0",
+    "ts-node": "^10.9.1",
+    "tsup": "^7.2.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.2.2"
+  },
+  "type": "module"
+}
