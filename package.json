@@ -1,5 +1,5 @@
 {
-  "name": "vibe-check",
+  "name": "vibe-checker",
   "version": "1.0.0",
   "description": "AI-powered codebase vulnerability scanner",
   "main": "dist/cli.cjs",
