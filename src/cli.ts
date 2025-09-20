@@ -35,8 +35,9 @@ function displayBanner() {
 
 const program = new Command();
 
-// Show banner when no arguments are provided or when help is shown
-if (process.argv.length === 2 || process.argv.includes('--help') || process.argv.includes('-h')) {
+// Show banner when no arguments are provided, when help is shown, or when running scan/config commands
+if (process.argv.length === 2 || process.argv.includes('--help') || process.argv.includes('-h') ||
+    process.argv.includes('scan') || process.argv.includes('config')) {
   displayBanner();
 }
 

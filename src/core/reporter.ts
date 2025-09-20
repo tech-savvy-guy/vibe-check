@@ -92,17 +92,15 @@ export class Reporter {
 
   private createInsightsSection(insights: string[]): string {
     const round = boxes.round;
-    
+
     let content = '';
-    content += chalk.bold.cyan('💡 AI INSIGHTS & RECOMMENDATIONS') + '\n';
+    content += chalk.bold.cyan('💡 AI ANALYSIS & INSIGHTS') + '\n';
     content += chalk.dim('─'.repeat(45)) + '\n';
     content += '\n';
-    
-    insights.forEach((insight, index) => {
-      const icon = ['🎯', '💡', '🔍', '⚡', '🛡️'][index % 5];
-      content += `${icon} ${this.wrapText(insight, 65, '   ')}\n`;
-      if (index < insights.length - 1) content += '\n';
-    });
+
+    // Handle single cohesive insight
+    const insight = insights[0] || '';
+    content += this.wrapText(insight, 65, '') + '\n';
 
     return this.wrapInBox(content, round);
   }
