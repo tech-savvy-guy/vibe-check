@@ -12,10 +12,11 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/cli.ts --format cjs,esm --dts",
+    "build": "tsup src/cli.ts --format cjs,esm --dts && npm run copy-fonts",
+    "copy-fonts": "mkdir -p dist/fonts && cp src/fonts/* dist/fonts/",
     "prepare": "pnpm build",
     "start": "tsx src/cli.ts",
-    "dev": "tsup src/cli.ts --format cjs,esm --dts --watch"
+    "dev": "tsup src/cli.ts --format cjs,esm --dts --watch && npm run copy-fonts"
   },
   "keywords": [
     "pnpm",
@@ -32,14 +33,21 @@
     "@inquirer/prompts": "^7.8.6",
     "@openrouter/ai-sdk-provider": "^1.2.0",
     "@types/cli-progress": "^3.11.6",
+    "@types/figlet": "^1.7.0",
     "ai": "^5.0.47",
     "chalk": "^5.6.2",
+    "cli-boxes": "^4.0.1",
     "cli-progress": "^3.12.0",
     "commander": "^11.0.0",
+    "figlet": "^1.9.3",
+    "gradient-string": "^3.0.0",
+    "markdown-it": "^14.1.0",
     "ora": "^7.0.1",
+    "puppeteer": "^24.22.0",
     "zod": "^4.1.9"
   },
   "devDependencies": {
+    "@types/markdown-it": "^14.1.2",
     "@types/node": "^20.8.0",
     "ts-node": "^10.9.1",
     "tsup": "^7.2.0",

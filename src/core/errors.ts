@@ -45,6 +45,13 @@ export class ValidationError extends Error {
   }
 }
 
+export class PDFGenerationError extends Error {
+  constructor(message: string, public readonly cause?: Error) {
+    super(message);
+    this.name = 'PDFGenerationError';
+  }
+}
+
 /**
  * Centralized error handler for consistent error reporting
  */
@@ -78,6 +85,12 @@ export class ErrorHandler {
       }
     } else if (error instanceof ValidationError) {
       console.error(`${contextPrefix}Validation Error: ${error.message}`);
+    } else if (error instanceof PDFGenerationError) {
+      console.error(`${contextPrefix}PDF Generation Failed: ${error.message}`);
+      if (error.cause) {
+        console.error('Underlying cause:', error.cause.message);
+      }
+      console.error('Please ensure you have sufficient permissions and disk space.');
     } else {
       console.error(`${contextPrefix}Unexpected Error: ${error.message}`);
       if (error.stack) {

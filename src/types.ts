@@ -1,6 +1,9 @@
 export interface ScanOptions {
   verbose?: boolean;
   output?: string;
+  pdf?: string;
+  pdfFont?: string;
+  pdfOpen?: boolean;
 }
 
 export interface VulnerabilityReport {
