@@ -1,6 +1,6 @@
 {
   "name": "vibe-check",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "AI-powered codebase vulnerability scanner",
   "main": "dist/cli.cjs",
   "module": "dist/cli.mjs",
