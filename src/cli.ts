@@ -1,23 +1,23 @@
 #!/usr/bin/env node
 
-import { Command } from 'commander';
-import chalk from 'chalk';
 import ora from 'ora';
+import chalk from 'chalk';
 import figlet from 'figlet';
+import { Command } from 'commander';
 import gradient from 'gradient-string';
-import cliBoxes from 'cli-boxes';
 import { Reporter } from './core/reporter';
-import { CodeAnalyzer } from './core/code-analyzer';
-import { InsightGenerator } from './core/insight-generator';
 import { PDFGenerator } from './core/pdf-generator';
+import { CodeAnalyzer } from './core/code-analyzer';
 import { ConfigCLI, configManager } from './config/cli';
+import { InsightGenerator } from './core/insight-generator';
 import type { ScanOptions, VulnerabilityReport } from './types';
-import { 
-  ConfigurationError, 
+import {
+  ConfigurationError,
   PDFGenerationError,
-  ErrorHandler 
+  ErrorHandler
 } from './core/errors';
 import fs from 'fs/promises';
+import { input, confirm } from '@inquirer/prompts';
 
 // Display beautiful banner
 function displayBanner() {
@@ -94,22 +94,91 @@ program
           const pdfGenerator = new PDFGenerator();
           await pdfGenerator.generatePDF(report, options.pdf, {
             customFont: options.pdfFont,
-            autoOpen: options.pdfOpen,
+            autoOpen: true, // Always open PDF by default
             markdown: options.pdfMarkdown
           });
           pdfSpinner.succeed(chalk.green('📄 PDF report generated successfully!'));
           console.log(chalk.blue(`📋 PDF report saved to: ${chalk.underline(options.pdf)}`));
-          
-          if (options.pdfOpen) {
-            console.log(chalk.cyan('🔗 PDF opened in default application'));
-          }
         } catch (error) {
           pdfSpinner.fail(chalk.red('❌ Failed to generate PDF report'));
-          
+
           if (error instanceof PDFGenerationError) {
             ErrorHandler.handle(error, 'PDF Export');
           } else {
             ErrorHandler.handle(new PDFGenerationError('PDF generation failed'), 'PDF Export');
+          }
+        }
+      } else {
+        // Interactive PDF saving when --pdf flag is not provided
+        try {
+          const savePDF = await confirm({
+            message: chalk.cyan('💾 Would you like to save this report as a PDF?'),
+            default: false
+          });
+
+          if (savePDF) {
+            let pdfPath = await input({
+              message: chalk.cyan('📂 Enter PDF file path (default: ./vibe-check-report.pdf):'),
+              default: './vibe-check-report.pdf',
+              validate: (value) => {
+                if (!value.trim()) {
+                  return 'File path cannot be empty';
+                }
+                return true;
+              }
+            });
+
+            // Ensure .pdf extension
+            if (!pdfPath.toLowerCase().endsWith('.pdf')) {
+              pdfPath += '.pdf';
+            }
+
+            // Check if file exists and ask for confirmation
+            try {
+              await fs.access(pdfPath);
+              const overwrite = await confirm({
+                message: chalk.yellow(`⚠️  File "${pdfPath}" already exists. Overwrite it?`),
+                default: false
+              });
+
+              if (!overwrite) {
+                console.log(chalk.dim('📄 PDF export cancelled.'));
+                return;
+              }
+            } catch (error) {
+              // File doesn't exist, continue
+            }
+
+            const pdfSpinner = ora({
+              text: chalk.blue('📄 Generating PDF report...'),
+              spinner: 'dots'
+            }).start();
+
+            try {
+              const pdfGenerator = new PDFGenerator();
+              await pdfGenerator.generatePDF(report, pdfPath, {
+                customFont: options.pdfFont,
+                autoOpen: true, // Always open PDF by default
+                markdown: options.pdfMarkdown
+              });
+              pdfSpinner.succeed(chalk.green('📄 PDF report generated successfully!'));
+              console.log(chalk.blue(`📋 PDF report saved to: ${chalk.underline(pdfPath)}`));
+            } catch (error) {
+              pdfSpinner.fail(chalk.red('❌ Failed to generate PDF report'));
+
+              if (error instanceof PDFGenerationError) {
+                ErrorHandler.handle(error, 'PDF Export');
+              } else {
+                ErrorHandler.handle(new PDFGenerationError('PDF generation failed'), 'PDF Export');
+              }
+            }
+          }
+        } catch (error) {
+          // Handle prompt cancellation or other errors gracefully
+          if (error instanceof Error && error.name === 'ExitPromptError') {
+            console.log(chalk.dim('\n📄 PDF export cancelled.'));
+          } else {
+            console.log(chalk.red('\n❌ Error during PDF prompt interaction'));
           }
         }
       }

@@ -1,10 +1,11 @@
-import puppeteer, { Browser, Page } from 'puppeteer';
+import { promisify } from 'util';
+import { exec } from 'child_process';
 import { HtmlFormatter } from './html-formatter';
 import { MarkdownFormatter } from './markdown-formatter';
 import type { VulnerabilityReport } from '../types';
+import puppeteer, { Browser, Page } from 'puppeteer';
 import { ErrorHandler, PDFGenerationError } from './errors';
-import { exec } from 'child_process';
-import { promisify } from 'util';
+
 
 const execAsync = promisify(exec);
 
