@@ -28,6 +28,10 @@
   ],
   "author": "Soham Datta",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tech-savvy-guy/vibe-check.git"
+  },
   "dependencies": {
     "@codebolt/codeboltjs": "^1.0.0",
     "@inquirer/prompts": "^7.8.6",
