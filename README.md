@@ -5,7 +5,7 @@
 `vibe-check` is a sophisticated security analysis tool that leverages advanced AI models to perform comprehensive codebase security audits. Unlike traditional static analysis tools that rely on predefined rules, `vibe-check` uses Large Language Models (LLMs) to understand code context and identify complex security vulnerabilities that might be missed by conventional scanners.
 
 <!-- Add a image below -->
-![vibe-check-image](./vibe-check.png)
+![vibe-check-image](https://raw.githubusercontent.com/tech-savvy-guy/vibe-check/main/vibe-check.png)
 
 
 ## Quick Start
